@@ -98,6 +98,11 @@ void ShortestPath(GraphAdjList G, int f, int t) {
 	float D1[MAXVERTEX];//当前最小点到其他点的距离
 	int finished[MAXVERTEX];//当前顶点是否已计算（是否属于S集）
 	int n = arcNum(G, f);//顶点数
+	if (f == t) {
+		cout << "0: 起点与终点相同" << endl;
+		system("pause");
+		return;
+	}
 	ifstream infile;
 	for (int i = 0; i < G.numvertex; i++) {//初始化数组
 		P[i] = f;
