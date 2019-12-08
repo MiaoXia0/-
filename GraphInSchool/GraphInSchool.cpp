@@ -2,28 +2,28 @@
 #include <string>
 #include <fstream>
 using namespace std;
-#define MAXVERTEX 32//最大顶点数
-#define INF 1000000//定义一个大数以便寻找最小值
-typedef char vertextype;//顶点
-typedef int arctype;//边
+#define MAXVERTEX 32       //最大顶点数
+#define INF 1000000        //定义一个大数以便寻找最小值
+typedef char vertextype;   //顶点
+typedef int arctype;       //边
 #pragma region 邻接表的结构体
 typedef struct ArcNode
 {
-	int adjvex;//下标
-	arctype wigth;//权值
-	struct ArcNode* next;//下一个顶点
-}ArcNode;//边
+	int adjvex;                        //下标
+	arctype wigth;                     //权值
+	struct ArcNode* next;              //下一个顶点
+}ArcNode;                              //边
 typedef struct VertexNode
 {
-	vertextype data;//顶点上的数据
-	ArcNode* firstarc;//第一个邻接顶点
-}VertexNode, AdjList[MAXVERTEX];//顶点
+	vertextype data;                //顶点上的数据
+	ArcNode* firstarc;              //第一个邻接顶点
+}VertexNode, AdjList[MAXVERTEX];    //顶点
 typedef struct
 {
-	AdjList adjlist;//邻接表
-	int numvertex;//顶点数
-	int numarc;//边数
-}GraphAdjList;//邻接表
+	AdjList adjlist;                           //邻接表
+	int numvertex;                             //顶点数
+	int numarc;                                //边数
+}GraphAdjList;                                 //邻接表
 #pragma endregion
 #pragma region 邻接表的操作
 //创建邻接表
@@ -31,31 +31,34 @@ void CreateAdjListGraph(GraphAdjList& G, int nv, int na)
 {
 	ifstream infile;
 	ArcNode* e;
-	G.numvertex = nv;//读取顶点数
-	G.numarc = na;//读取边数
-	for (int i = 0; i < G.numvertex; i++)//建立顶点表
+	G.numvertex = nv;                           //读取顶点数
+	G.numarc = na;                              //读取边数
+	for (int i = 0; i < G.numvertex; i++)       //建立顶点表
 	{
-		G.adjlist[i].data = i;;//顶点数据为0, 1, 2...
-		G.adjlist[i].firstarc = NULL;//将表边指针置为空
+		G.adjlist[i].data = i;;                 //顶点数据为0, 1, 2...
+		G.adjlist[i].firstarc = NULL;           //将表边指针置为空
 	}
 	infile.open("arcs.txt");
 	for (int k = 0; k < G.numarc; k++)
 	{
 		int i, j, w;
-		infile >> i >> j >> w;//边两顶点及权值
-		e = new ArcNode;//创建一个边节点指针
+		infile >> i >> j >> w;                   //边两顶点及权值
+		e = new ArcNode;                         //创建一个边节点指针
 		e->adjvex = j;
 		e->wigth = w;
 		e->next = G.adjlist[i].firstarc;
 		G.adjlist[i].firstarc = e;
-		//无向图，对称创建邻接表
-		e = new ArcNode;//创建一个表边节点指针
+		/**************************
+		 *无向图，对称创建邻接表  *
+		 **************************/
+		e = new ArcNode;                          //创建一个表边节点指针
 		e->adjvex = i;
 		e->wigth = w;
 		e->next = G.adjlist[j].firstarc;
 		G.adjlist[j].firstarc = e;
 	}
 }
+
 //打印邻接表（未使用）
 void PrintfGraphAdjList(GraphAdjList G)
 {
@@ -71,6 +74,7 @@ void PrintfGraphAdjList(GraphAdjList G)
 		cout << endl;
 	}
 }
+
 //返回图G中从f连接到其他顶点的边的数量
 int arcNum(GraphAdjList G, int f) {
 	int i = 0;
@@ -82,6 +86,7 @@ int arcNum(GraphAdjList G, int f) {
 	}
 	return i;
 }
+
 //计算图G中从f到其他顶点的单边距离
 void PathNow(GraphAdjList G, int f, float* D) {
 	ArcNode* p;
@@ -91,32 +96,33 @@ void PathNow(GraphAdjList G, int f, float* D) {
 		p = p->next;
 	}
 }
+
 //求从f到t的最短路径
 void ShortestPath(GraphAdjList G, int f, int t) {
-	int P[MAXVERTEX];//最短路径终点的前驱点
-	float D[MAXVERTEX];//从起点到某点的长度
-	float D1[MAXVERTEX];//当前最小点到其他点的距离
-	int finished[MAXVERTEX];//当前顶点是否已计算（是否属于S集）
-	int n = arcNum(G, f);//顶点数
+	int P[MAXVERTEX];                          //最短路径终点的前驱点
+	float D[MAXVERTEX];                        //从起点到某点的长度
+	float D1[MAXVERTEX];                       //当前最小点到其他点的距离
+	int finished[MAXVERTEX];                   //当前顶点是否已计算（是否属于S集）
+	int n = arcNum(G, f);                      //顶点数
 	if (f == t) {
 		cout << "0: 起点与终点相同" << endl;
 		system("pause");
 		return;
 	}
 	ifstream infile;
-	for (int i = 0; i < G.numvertex; i++) {//初始化数组
+	for (int i = 0; i < G.numvertex; i++) {    //初始化数组
 		P[i] = f;
 		D[i] = INF;
 		D1[i] = INF;
 		finished[i] = 0;
 	}
-	PathNow(G, f, D);//找到起点到某点的当前长度记录到数组D中
-	D[f] = 0;//当前点最短路径为0
-	finished[f] = 1;//当前点已完成
-	P[f] = -1;//当前点没有前驱点
+	PathNow(G, f, D);                          //找到起点到某点的当前长度记录到数组D中
+	D[f] = 0;                                  //当前点最短路径为0
+	finished[f] = 1;                           //当前点已完成
+	P[f] = -1;                                 //当前点没有前驱点
 	for (int i = 1; i < G.numvertex; i++) {
 		int min = INF + 1;
-		int j;//存储更小路径的下标
+		int j;                                 //存储更小路径的下标
 		for (int i = 0; i < G.numvertex; i++) {
 			if (finished[i] == 0 && D[i] < min) {
 				j = i;
@@ -124,10 +130,11 @@ void ShortestPath(GraphAdjList G, int f, int t) {
 			}
 		}
 		finished[j] = 1;
-		PathNow(G, j, D1);//求当前顶点点到其他顶点的距离
-		D1[j] = 0;//当前顶点到自己的距离为0
+		PathNow(G, j, D1);                     //求当前顶点点到其他顶点的距离
+		D1[j] = 0;                             //当前顶点到自己的距离为0
 		for (int i = 0; i < G.numvertex; i++) {
-			if (finished[i] == 0 && (D[j] + D1[i] < D[i])) {//由当前最小点到某点距离比从初始点这点更短
+			                                   //由当前最小点到某点距离比从初始点这点更短
+			if (finished[i] == 0 && (D[j] + D1[i] < D[i])) {
 				D[i] = D[j] + D1[i];
 				P[i] = j;
 			}
@@ -151,6 +158,7 @@ void ShortestPath(GraphAdjList G, int f, int t) {
 	cout << endl;
 	system("pause");
 }
+
 //最小生成树并输出树中的边
 void Prim(GraphAdjList G) {
 	int flag[MAXVERTEX] = { 0 };
@@ -162,26 +170,26 @@ void Prim(GraphAdjList G) {
 	for (int n = 0; n < G.numvertex; n++) {
 		for (int i = 0; i < G.numvertex; i++) {
 			D[n][i] = INF;//
-			PathNow(G, n, D[n]);//求出所有点到其他点的路径长度
+			PathNow(G, n, D[n]);                                //求出所有点到其他点的路径长度
 		}
 	}
-	flag[0] = 1;//顶点0加入图
-	for (int n = 0; n < G.numvertex; n++) {//循环顶点数量次以将所有顶点加入
-		mincost = INF;//设最小为一个大数
-		for (j = 0; j < G.numvertex; j++) {//对于所有顶点
-			if (flag[j] == 1) {//若已加入图
-				for (int i = 0; i < G.numvertex; i++) {//对于加入图的所有顶点到所有其他顶点
-					if (D[j][i] < mincost && flag[i] == 0) {//如果距离小于最小距离且未加入图
-						k = i;//记录这个顶点
-						mincost = D[j][i];//此边是最小的边
-						t = j;//记录当前最短边的起点
+	flag[0] = 1;                                                //顶点0加入图
+	for (int n = 0; n < G.numvertex; n++) {                     //循环顶点数量次以将所有顶点加入
+		mincost = INF;                                          //设最小为一个大数
+		for (j = 0; j < G.numvertex; j++) {                     //对于所有顶点
+			if (flag[j] == 1) {                                 //若已加入图
+				for (int i = 0; i < G.numvertex; i++) {         //对于加入图的所有顶点到所有其他顶点
+					if (D[j][i] < mincost && flag[i] == 0) {    //如果距离小于最小距离且未加入图
+						k = i;                                  //记录这个顶点
+						mincost = D[j][i];                      //此边是最小的边
+						t = j;                                  //记录当前最短边的起点
 					}
 				}
 			}
 		}
-		if (k != -1)//若k改变了
-			arcs[t][k] = 1;//对应的边为加入图中 j最后又自增了所以-1
-		flag[k] = 1;//顶点加入图中
+		if (k != -1)                                            //若k改变了
+			arcs[t][k] = 1;                                     //对应的边为加入图中 j最后又自增了所以-1
+		flag[k] = 1;                                            //顶点加入图中
 	}
 	string buildings[MAXVERTEX];
 	infile.open("buildings.txt");
@@ -214,15 +222,16 @@ int menu() {
 	cin >> n;
 	return n;
 }
+
 //查询信息的菜单
 void infOf(int n) {
 	int c;
 	ifstream infile;
 	string buildings[MAXVERTEX], introduces[MAXVERTEX];
 	infile.open("buildings.txt");
-	infile.seekg(sizeof(int) * 2, ios::cur);//跳过顶点数和边数
+	infile.seekg(sizeof(int) * 2, ios::cur);           //跳过顶点数和边数
 	for (int i = 0; i < n; i++) {
-		infile >> buildings[i];//文件中读取建筑列表
+		infile >> buildings[i];                        //文件中读取建筑列表
 	}
 	infile.close();
 
@@ -237,7 +246,7 @@ void infOf(int n) {
 			cout << "请输入选项：";
 			cin >> c;
 			if (c == -1) {
-				return;//输入-1退出
+				return;                                //输入-1退出
 			}
 
 		} while (c < 0 || c > 9);
@@ -253,6 +262,7 @@ void infOf(int n) {
 	}
 }
 #pragma endregion
+
 //主函数
 int main(int argc, char* argv[])
 {
@@ -260,14 +270,14 @@ int main(int argc, char* argv[])
 	string names[MAXVERTEX];
 	int choice, nv, na, from, to, gn;
 	string str[16];
-	GraphAdjList G;//声明邻接表变量
-	infile.open("graph.txt");//从graph.txt中读取图形
+	GraphAdjList G;                           //声明邻接表变量
+	infile.open("graph.txt");                 //从graph.txt中读取图形
 	infile >> gn;
 	for (int i = 0; i < gn; i++) {
 		infile >> str[i];
 	}
 	infile.close();
-	infile.open("buildings.txt");//从buildings.txt读取建筑数量、路的数量以及名称
+	infile.open("buildings.txt");             //从buildings.txt读取建筑数量、路的数量以及名称
 	infile >> nv;
 	infile >> na;
 	for (int i = 0; i < nv; i++)
@@ -275,30 +285,34 @@ int main(int argc, char* argv[])
 		infile >> names[i];
 	}
 	infile.close();
-	CreateAdjListGraph(G, nv, na);//建立无向邻接表存储图，建立时从文件中读取边和权值
-	while (1) {//输出图像并打开菜单
+	CreateAdjListGraph(G, nv, na);            //建立无向邻接表存储图，建立时从文件中读取边和权值
+	while (1) {                               //输出图像并打开菜单
 		for (int i = 0; i < gn; i++) {
 			cout << str[i] << endl;
 		}
 		choice = menu();
 		switch (choice) {
-		case 1://查看信息
-			infOf(nv);//将顶点数作为参数输入
+		case 1:                               //查看信息
+			infOf(nv);                        //将顶点数作为参数输入
 			break;
-		case 2://寻找最短路径
+		case 2:                               //寻找最短路径
 			cout << "输入两个编号：";
 			cin >> from >> to;
 			ShortestPath(G, from, to);
 			break;
-		case 3://建立最小生成树作为通信网络
+		case 3:                               //建立最小生成树作为通信网络
 			Prim(G);
 			break;
 		case 0:
-			exit(0);//退出返回0
+			exit(0);                          //退出返回0
 		default:
-			break;//输错直接跳出switch
+			break;                            //输错直接跳出switch
 		}
 		system("cls");
 	}
 	return 0;
 }
+
+/****************************
+ *校园导游程序及通信线路设计*
+ ****************************/

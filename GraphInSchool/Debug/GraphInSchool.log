@@ -1,6 +1,6 @@
 ﻿  GraphInSchool.cpp
-C:\Users\HUANG\source\repos\ShuJuJieGou\GraphInSchool\GraphInSchool.cpp(90,19): warning C4244: “=”: 从“arctype”转换到“float”，可能丢失数据
-C:\Users\HUANG\source\repos\ShuJuJieGou\GraphInSchool\GraphInSchool.cpp(123,14): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
-C:\Users\HUANG\source\repos\ShuJuJieGou\GraphInSchool\GraphInSchool.cpp(176,23): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
-C:\Users\HUANG\source\repos\ShuJuJieGou\GraphInSchool\GraphInSchool.cpp(159,11): warning C4101: “p”: 未引用的局部变量
+C:\Users\HUANG\source\repos\ShuJuJieGou\GraphInSchool\GraphInSchool.cpp(95,19): warning C4244: “=”: 从“arctype”转换到“float”，可能丢失数据
+C:\Users\HUANG\source\repos\ShuJuJieGou\GraphInSchool\GraphInSchool.cpp(129,14): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
+C:\Users\HUANG\source\repos\ShuJuJieGou\GraphInSchool\GraphInSchool.cpp(184,23): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
+C:\Users\HUANG\source\repos\ShuJuJieGou\GraphInSchool\GraphInSchool.cpp(167,11): warning C4101: “p”: 未引用的局部变量
   GraphInSchool.vcxproj -> C:\Users\HUANG\source\repos\ShuJuJieGou\Debug\GraphInSchool.exe
